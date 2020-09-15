@@ -1,0 +1,7 @@
+{
+  "name": "@umbrellio/ga-tracker",
+  "version": "0.0.1",
+  "description": "Google Analytics tracker",
+  "main": "index.js",
+  "license": "MIT"
+}
