@@ -20,8 +20,17 @@ class Emitter {
     this.params.visitor = new Visitor(cid)
   }
 
-  pageView = path => {
-    const event = new Events.PageViewEvent(path)
+  pageView = location => {
+    const event = new Events.PageViewEvent({ location })
+    return this.__emit(event)
+  }
+
+  time = (category, name, duration) => {
+    const event = new Events.TimeEvent({ category, name, duration })
+    return this.__emit(event)
+  }
+
+  __emit = event => {
     const payload = this.params.buildFor(event)
     return this.api.collect(payload)
   }

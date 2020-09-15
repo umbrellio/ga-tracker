@@ -7,8 +7,8 @@ class Event {
 }
 
 class PageViewEvent extends Event {
-  constructor(location) {
-    super(location)
+  constructor({ location }) {
+    super()
     this.__data = {
       t: "pageview",
       dl: location,
@@ -16,6 +16,19 @@ class PageViewEvent extends Event {
   }
 }
 
+class TimingEvent extends Event {
+  constructor({ category, name, duration }) {
+    super()
+    this.__data = {
+      t: "timing",
+      utc: category,
+      utv: name,
+      utt: duration,
+    }
+  }
+}
+
 export default {
   PageViewEvent,
+  TimingEvent,
 }
