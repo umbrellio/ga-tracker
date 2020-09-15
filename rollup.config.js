@@ -3,7 +3,6 @@ import resolve from "rollup-plugin-node-resolve"
 
 const shared = {
   input: "src/index.js",
-  external: ["react"],
   plugins: [
     resolve({
       customResolveOptions: {
@@ -20,23 +19,23 @@ const config = [
   ({ ...shared,
     ...{
       output: {
-        file: "dist/observable.cjs.js",
+        file: "dist/tracker.cjs.js",
         format: "cjs",
       },
     } }),
   ({ ...shared,
     ...{
       output: {
-        file: "dist/observable.es.js",
+        file: "dist/tracker.es.js",
         format: "es",
       },
     } }),
   ({ ...shared,
     ...{
       output: {
-        file: "dist/observable.iife.js",
+        file: "dist/tracker.iife.js",
         format: "iife",
-        name: "T",
+        name: "Tracker",
       },
     } }),
 ]

@@ -2,13 +2,29 @@
   "name": "@umbrellio/ga-tracker",
   "version": "0.0.1",
   "description": "Google Analytics tracker",
-  "main": "index.js",
+  "author": "Aleksei Bespalov <nulldefiner@gmail.com>",
   "license": "MIT",
+  "main": "dist/observable.cjs.js",
+  "module": "dist/observable.es.js",
+  "unpkg": "dist/observable.iife.js",
+  "scripts": {
+    "build": "rollup -c",
+    "lint": "eslint .",
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
   "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/preset-env": "^7.11.5",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.9.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prefer-object-spread": "^1.2.1",
-    "eslint-plugin-promise": "^4.2.1"
+    "eslint-plugin-promise": "^4.2.1",
+    "rollup": "^2.26.11",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
   }
 }
