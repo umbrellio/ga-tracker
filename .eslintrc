@@ -1,0 +1,27 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "plugins": [
+    "prefer-object-spread",
+    "import",
+    "promise"
+  ],
+  "rules": {
+    "switch-colon-spacing": "off",
+    "no-buffer-constructor": "off",
+    "no-unused-vars": ["error", { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }],
+    "new-cap": "off",
+    "quotes": ["error", "double"],
+    "prefer-promise-reject-errors": "off",
+    "eqeqeq": ["error", "smart"],
+    "import/order": ["error", {
+      "groups": [["builtin", "external"], "internal", "parent", "sibling"],
+      "newlines-between": "always-and-inside-groups"
+    }],
+    "import/no-anonymous-default-export": ["error", { "allowObject": true }],
+    "import/group-exports": "error"
+  }
+}

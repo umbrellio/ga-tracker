@@ -1,6 +1,6 @@
 import utils from "./utils"
 
-const makeBody = object => encodeURI(utils.serialize(body))
+const makeBody = object => encodeURI(utils.serialize(object))
 
 const makeRequest = (verb, url, body) => new Promise((resolve, reject) => {
   const xhr = new XMLHttpRequest()
