@@ -1,9 +1,6 @@
-const serialize = obj => {
-  return Object.entries(obj).reduce((mem, [key, value]) => {
-    if (obj.hasOwnProperty(key)) return [...mem, `${key}=${value}`]
-    return mem
-  }, []).join("&")
-}
+const serialize = obj => Object
+  .entries(obj)
+  .reduce((mem, [key, value]) => ([...mem, `${key}=${value}`]), []).join("&")
 
 const join = (...parts) => parts.map(x => x.replace(/^\/+|\/+$/g, "")).join("/")
 

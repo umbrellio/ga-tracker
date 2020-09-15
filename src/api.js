@@ -2,7 +2,7 @@ import utils from "./utils"
 import http from "./http"
 
 class API {
-  constructor({ debug } = {}) {
+  constructor({ debug }) {
     this.debug = !!debug
   }
 

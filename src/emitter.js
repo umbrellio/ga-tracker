@@ -11,9 +11,9 @@ class Emitter {
     return new Emitter(tracker, visitor, options)
   }
 
-  constructor(tracker, visitor, options = {}) {
+  constructor(tracker, visitor, options) {
     this.params = new Params(tracker, visitor)
-    this.api = new API(options.api || {})
+    this.api = new API(options)
   }
 
   setVisitor = cid => {
