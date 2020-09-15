@@ -1,5 +1,8 @@
 # @umbrellio/ga-tracker
 
+[![Coverage Status](https://coveralls.io/repos/github/umbrellio/ga-tracker/badge.svg?branch=master)](https://coveralls.io/github/umbrellio/ga-tracker?branch=master)
+[![Build Status](https://travis-ci.com/umbrellio/ga-tracker.svg?branch=master)](https://travis-ci.com/umbrellio/ga-tracker)
+
 Google Analytics tracker for web env (no `window` object required).
 
 ## Install
@@ -23,16 +26,20 @@ Where `tracking-id` is your app id (like `UA-XXXXXXXXX-X`), and `customer-id` is
 Available methods:
 
 - `pageView(path)` – track page viewing
+
   `path` - request path (eg. "/contacts")
 
 - `time(category, name, duration)` – track custom time
+
   `category` – measurement category
+
   `name` – measurement name
+
   `duration` – measurement duration
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/umbrellio/observable.
+Bug reports and pull requests are welcome on GitHub at https://github.com/umbrellio/ga-tracker.
 
 ## License
 
