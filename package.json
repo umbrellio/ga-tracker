@@ -4,9 +4,9 @@
   "description": "Google Analytics tracker",
   "author": "Aleksei Bespalov <nulldefiner@gmail.com>",
   "license": "MIT",
-  "main": "dist/observable.cjs.js",
-  "module": "dist/observable.es.js",
-  "unpkg": "dist/observable.iife.js",
+  "main": "dist/tracker.cjs.js",
+  "module": "dist/tracker.es.js",
+  "unpkg": "dist/tracker.iife.js",
   "scripts": {
     "build": "rollup -c",
     "lint": "eslint .",

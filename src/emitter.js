@@ -26,7 +26,7 @@ class Emitter {
   }
 
   time = (category, name, duration) => {
-    const event = new Events.TimeEvent({ category, name, duration })
+    const event = new Events.TimingEvent({ category, name, duration })
     return this.__emit(event)
   }
 
