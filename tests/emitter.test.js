@@ -17,13 +17,13 @@ function mockXMLHttpRequest(status, data) {
   return mock
 }
 
-const makeExpectation = (mock, { url, body, responseStatus, responseText }) => {
-  return ({ status, response }) => {
-    expect(status).toBe(responseStatus || 200)
-    expect(response).toBe(responseText || "")
+const makeExpectation = (mock, { url, bodies }) => {
+  return () => {
     expect(mock.open)
-      .toHaveBeenCalledWith("POST", url || "https://www.google-analytics.com/collect", true)
-    expect(mock.send).toHaveBeenCalledWith(body)
+      .toHaveBeenCalledWith("POST", url || "https://www.google-analytics.com/batch", true)
+    bodies.forEach((body, index) => {
+      expect(mock.send).toHaveBeenNthCalledWith(index + 1, body)
+    })
   }
 }
 
@@ -31,54 +31,83 @@ it("sets a debug mode", () => {
   const mock = mockXMLHttpRequest(200, "")
   const emitter = GATracker.Emitter.create("U-XXX-1", "customer", { debug: true })
   const expectation = makeExpectation(mock, {
-    url: "https://www.google-analytics.com/debug/collect",
-    body: "v=1&tid=U-XXX-1&cid=customer&t=pageview&dl=/home"
+    url: "https://www.google-analytics.com/debug/batch",
+    bodies: ["v=1&tid=U-XXX-1&cid=customer&t=pageview&dl=/home"]
   })
-  return emitter.pageView("/home").then(expectation)
+  emitter.pageView("/home")
+  return emitter.commit().then(expectation)
+})
+
+it("sends a stack of events", () => {
+  const mock = mockXMLHttpRequest(200, "")
+  const emitter = GATracker.Emitter.create("U-XXX-1", "customer")
+  const expectation = makeExpectation(mock, {
+    bodies: [
+      "v=1&tid=U-XXX-1&cid=customer&t=pageview&dl=/home\n" +
+        "v=1&tid=U-XXX-1&cid=customer&t=pageview&dl=/home\n" +
+        "v=1&tid=U-XXX-1&cid=customer&t=pageview&dl=/home\n" +
+        "v=1&tid=U-XXX-1&cid=customer&t=pageview&dl=/home\n" +
+        "v=1&tid=U-XXX-1&cid=customer&t=pageview&dl=/home",
+      "v=1&tid=U-XXX-1&cid=customer&t=pageview&dl=/contacts\n" +
+        "v=1&tid=U-XXX-1&cid=customer&t=pageview&dl=/contacts\n" +
+        "v=1&tid=U-XXX-1&cid=customer&t=pageview&dl=/contacts\n" +
+        "v=1&tid=U-XXX-1&cid=customer&t=pageview&dl=/contacts\n" +
+        "v=1&tid=U-XXX-1&cid=customer&t=pageview&dl=/contacts"
+    ]
+  })
+  for (let i = 0; i < 5; i++) emitter.pageView("/home")
+  for (let i = 0; i < 5; i++) emitter.pageView("/contacts")
+  return emitter.commit().then(expectation)
 })
 
 it("sets a new visitor", () => {
   const mock = mockXMLHttpRequest(200, "")
   const emitter = GATracker.Emitter.create("U-XXX-1", "customer")
-  emitter.setVisitor("another-customer")
+  emitter.setVisitor({ identifier: "another-customer" })
   const expectation = makeExpectation(mock, {
-    body: "v=1&tid=U-XXX-1&cid=another-customer&t=pageview&dl=/home"
+    bodies: ["v=1&tid=U-XXX-1&uid=another-customer&t=pageview&dl=/home"]
   })
-  return emitter.pageView("/home").then(expectation)
+  emitter.pageView("/home")
+  return emitter.commit().then(expectation)
 })
 
 it("clears a visitor param", () => {
   const emitter = GATracker.Emitter.create("U-XXX-1")
   const mock = mockXMLHttpRequest(200, "")
-  const expectation = makeExpectation(mock, { body: "v=1&tid=U-XXX-1&t=pageview&dl=/home" })
-  return emitter.pageView("/home").then(expectation)
+  const expectation = makeExpectation(mock, { bodies: ["v=1&tid=U-XXX-1&t=pageview&dl=/home"] })
+  emitter.pageView("/home")
+  return emitter.commit().then(expectation)
 })
 
 it("sends pageview metric to GA", () => {
   const mock = mockXMLHttpRequest(200, "")
   const emitter = GATracker.Emitter.create("U-XXX-1", "customer")
   const expectation = makeExpectation(mock, {
-    body: "v=1&tid=U-XXX-1&cid=customer&t=pageview&dl=/home"
+    bodies: ["v=1&tid=U-XXX-1&cid=customer&t=pageview&dl=/home"]
   })
-  return emitter.pageView("/home").then(expectation)
+  emitter.pageView("/home")
+  return emitter.commit().then(expectation)
 })
 
 it("sends time metric to GA", () => {
   const mock = mockXMLHttpRequest(200, "")
   const emitter = GATracker.Emitter.create("U-XXX-1", "customer")
   const expectation = makeExpectation(mock, {
-    body: "v=1&tid=U-XXX-1&cid=customer&t=timing&utc=app&utv=open&utt=1234"
+    bodies: ["v=1&tid=U-XXX-1&cid=customer&t=timing&utc=app&utv=open&utt=1234"]
   })
-  return emitter.time("app", "open", 1234).then(expectation)
+  emitter.time("app", "open", 1234)
+  return emitter.commit().then(expectation)
 })
 
 it("fails on error", () => {
-  const mock = mockXMLHttpRequest(422, "something goes wrong")
-  const emitter = GATracker.Emitter.create("U-XXX-1", "customer")
-  const expectation = makeExpectation(mock, {
-    responseStatus: 422,
-    responseText: "something goes wrong",
-    body: "v=1&tid=U-XXX-1&cid=customer&t=timing&utc=app&utv=open&utt=1234"
+  mockXMLHttpRequest(422, "something goes wrong")
+  const onError = jest.fn()
+  const emitter = GATracker.Emitter.create("U-XXX-1", "customer", { onError })
+  emitter.time("app", "open", 1234)
+  return emitter.commit().then(() => {
+    expect(onError).toHaveBeenCalledWith({
+      status: 422,
+      response: "something goes wrong"
+    })
   })
-  return emitter.time("app", "open", 1234).catch(expectation)
 })

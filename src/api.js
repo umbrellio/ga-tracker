@@ -1,12 +1,17 @@
 import utils from "./utils"
 import http from "./http"
 
+const makeBody = object => encodeURI(utils.serialize(object))
+
 class API {
   constructor({ debug }) {
     this.debug = !!debug
   }
 
-  collect = params => http.post(this.getUrl("collect"), params)
+  batch = payloads => {
+    const params = payloads.map(makeBody).join("\n")
+    return http.post(this.getUrl("batch"), params)
+  }
 
   getUrl = path => {
     const components = []

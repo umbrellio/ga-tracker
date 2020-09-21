@@ -1,6 +1,6 @@
 {
   "name": "@umbrellio/ga-tracker",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "Google Analytics tracker",
   "author": "Aleksei Bespalov <nulldefiner@gmail.com>",
   "license": "MIT",

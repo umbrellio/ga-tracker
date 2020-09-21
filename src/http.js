@@ -1,7 +1,3 @@
-import utils from "./utils"
-
-const makeBody = object => encodeURI(utils.serialize(object))
-
 const makeRequest = (verb, url, body) => new Promise((resolve, reject) => {
   const xhr = new XMLHttpRequest()
 
@@ -10,7 +6,7 @@ const makeRequest = (verb, url, body) => new Promise((resolve, reject) => {
   xhr.onerror = () => reject({ status: xhr.status, response: xhr.response })
 
   xhr.open(verb, url, true)
-  xhr.send(makeBody(body))
+  xhr.send(body)
 })
 
 const post = (url, body) => makeRequest("POST", url, body)

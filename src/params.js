@@ -4,11 +4,20 @@ class Params {
     this.visitor = visitor
   }
 
-  buildFor = event => {
-    const baseParam = { v: 1, tid: this.tracker.identifier }
-    const visitorParam = this.visitor.isEmpty() ? {} : { cid: this.visitor.identifier }
+  buildFor = event => ({
+    v: 1,
+    tid: this.tracker.identifier,
+    ...this.__getVisitorParams(),
+    ...event.getPayload(),
+  })
 
-    return { ...baseParam, ...visitorParam, ...event.getPayload() }
+  __getVisitorParams = () => {
+    if (this.visitor.isEmpty()) return {}
+
+    const obj = {}
+    if (this.visitor.uuid) obj["cid"] = this.visitor.uuid
+    if (this.visitor.identifier) obj["uid"] = this.visitor.identifier
+    return obj
   }
 }
 

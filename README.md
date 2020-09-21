@@ -16,14 +16,18 @@ $ yarn add @umbrellio/ga-tracker
 ```js
 import GATracker from "@umbrellio/ga-tracker"
 
-const emitter = GATracker.Emitter.create(<tracking-id>, <customer-id>)
+const emitter = GATracker.Emitter.create(<tracking-id>, <uuid>)
 
 emitter.pageView("/contacts")
 ```
 
-Where `tracking-id` is your app id (like `UA-XXXXXXXXX-X`), and `customer-id` is your customer identifier (can be empty).
+Where `tracking-id` is your app id (like `UA-XXXXXXXXX-X`), and `uuid` is your customer unique identifier.
 
 Available methods:
+
+- `setVisitor({ identifier, uuid })` – set visitor's identifiers
+
+- `commit()` – send batch of tracked events
 
 - `pageView(path)` – track page viewing
 
