@@ -1,26 +1,11 @@
-import utils from "./utils"
 import http from "./http"
+import utils from "./utils"
 
-const makeBody = object => encodeURI(utils.serialize(object))
-
-class API {
-  constructor({ debug }) {
-    this.debug = !!debug
-  }
-
-  batch = payloads => {
-    const params = payloads.map(makeBody).join("\n")
-    return http.post(this.getUrl("batch"), params)
-  }
-
-  getUrl = path => {
-    const components = []
-    components.push("https://www.google-analytics.com")
-    if (this.debug) components.push("debug")
-    components.push(path)
-
-    return utils.join(...components)
-  }
+const send = params => {
+  const body = encodeURI(utils.serialize(params))
+  return http.post("https://www.google-analytics.com/collect", body)
 }
 
-export default API
+export default {
+  send
+}

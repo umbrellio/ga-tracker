@@ -16,30 +16,20 @@ $ yarn add @umbrellio/ga-tracker
 ```js
 import GATracker from "@umbrellio/ga-tracker"
 
-const emitter = GATracker.Emitter.create(<tracking-id>, <uuid>)
+const tracker = GATracker.create(trackingId)
 
-emitter.pageView("/contacts")
+tracker.pageview({ dp: "/contacts", dt: "Contacts" })
 ```
 
-Where `tracking-id` is your app id (like `UA-XXXXXXXXX-X`), and `uuid` is your customer unique identifier.
+Where `trackingId` is your app tracking id (like `UA-XXXXXXXXX-X`).
 
 Available methods:
 
-- `setVisitor({ identifier, uuid })` – set visitor's identifiers
+- `set(key, value)` – set any global var (like [user params](https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#user))
 
-- `commit()` – send batch of tracked events
+- `pageview({ dl, dh, dp, dt })` – track page viewing ([Docs](https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#content))
 
-- `pageView(path)` – track page viewing
-
-  `path` - request path (eg. "/contacts")
-
-- `time(category, name, duration)` – track custom time
-
-  `category` – measurement category
-
-  `name` – measurement name
-
-  `duration` – measurement duration
+- `timing({ utc, utv, utt, utl })` – track custom timings ([Docs](https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#timing))
 
 ## Contributing
 
