@@ -2,9 +2,9 @@ import api from "./api"
 import utils from "./utils"
 import validations from "./validations"
 
-const vars = new Map
+let vars = {}
 
-const buildParams = data => utils.compact({ ...Object.fromEntries(vars), ...data })
+const buildParams = data => utils.compact({ ...vars, ...data })
 
 const timeout = wait => new Promise(resolve => setTimeout(resolve, wait))
 
@@ -14,7 +14,7 @@ const send = data => {
   else return timeout(3000).then(() => send(data))
 }
 
-const set = (name, value) => vars.set(name, value)
+const set = (name, value) => (vars[name] = value)
 
 const pageview = ({ dl, dh, dp, dt }) => send({ t: "pageview", dl, dh, dp, dt })
 

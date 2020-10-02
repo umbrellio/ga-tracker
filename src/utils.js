@@ -3,8 +3,14 @@ const serialize = obj => Object
   .reduce((mem, [key, value]) => ([...mem, `${key}=${value}`]), []).join("&")
 
 const compact = obj => {
-  const entries = Object.entries(obj).filter(([_key, value]) => value != null)
-  return Object.fromEntries(entries)
+  let newObj = {}
+  const keys = Object.keys(obj)
+
+  return keys.reduce((mem, key) => {
+    const value = obj[key]
+    if (value == null) return mem
+    return {...mem, [key]: value}
+  }, {})
 }
 
 export default {
