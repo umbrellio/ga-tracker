@@ -1,6 +1,7 @@
 import api from "./api"
 import utils from "./utils"
 import validations from "./validations"
+import errors from "./errors"
 
 let vars = {}
 
@@ -31,4 +32,7 @@ const create = tid => {
   }
 }
 
-export default { create }
+export default { 
+  create,
+  Errors: errors,
+}
