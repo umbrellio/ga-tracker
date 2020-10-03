@@ -31,6 +31,28 @@ Available methods:
 
 - `timing({ utc, utv, utt, utl })` – track custom timings ([Docs](https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#timing))
 
+## Errors
+
+#### NetworkError
+
+```js
+import GATracker from "@umbrellio/ga-tracker"
+
+GATracker.Errors.NetworkError
+```
+
+Throws when there was an error while sending a http request.
+
+#### ConnectionError
+
+```js
+import GATracker from "@umbrellio/ga-tracker"
+
+GATracker.Errors.ConnectionError
+```
+
+Throws when unable to send a http request.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/umbrellio/ga-tracker.
